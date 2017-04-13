@@ -1,23 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Template</title>
+    <title>Three JS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="vendors/bootstrap/dist/css/bootstrap.min.css"/>
 
     <link rel="stylesheet" href="css/style.css"/>
     <script type="text/javascript" src="vendors/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--<script type="text/javascript" src="vendors/threejs/build/three.js"></script>-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
 </head>
 <body>
 <div class="container">
-
+    <canvas id="canvas"></canvas>
 </div>
-
 <script>
     $(document).ready(function () {
+        var renderer = new THREE.WebGLRenderer({canvas: $('#canvas')[0], antialias: true});
+        renderer.setClearColor(0x00ff00);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        var camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 3000);
+        camera.position.set(0,0,0);
+
+        var scene = new THREE.Scene();
+
+        var light = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(light);
+
+        var light = new THREE.PointLight(0xffffff, 0.5);
+        scene.add(light);
+
+
+        var geometry = new THREE.CubeGeometry(100, 100, 100);
+        var material = new THREE.MeshLambertMaterial({color:0xF3ffe2});
+        var mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(0,0,-1000);
+        scene.add(mesh);
+
+        requestAnimationFrame(render);
+
+        function render(){
+
+            mesh.rotation.x +=0.01;
+            mesh.rotation.y +=0.01;
+            renderer.render(scene, camera);
+            requestAnimationFrame(render);
+        }
+
+
+        renderer.render(scene, camera);
 
     });
 </script>
